@@ -7,6 +7,24 @@ function App() {
   const [pets, setPets] = useState([]);
   const [filters, setFilters] = useState({ type: "all" });
 
+  const onChangeType = (type) => {
+    setFilters(type)
+  }
+
+  const onFindPetsClick = () => {
+    if(filters === "all") {
+      fetch('http://localhost:3001/pets')
+        .then(r => r.json())
+        .then(petsData => setPets(petsData))
+    } else {
+      fetch(`http://localhost:3001/pets/?type=${filters}`)
+        .then(r => r.json())
+        .then(petsData => setPets(petsData))
+    }
+  }
+
+  console.log(pets)
+
   return (
     <div className="ui container">
       <header>
@@ -15,7 +33,7 @@ function App() {
       <div className="ui container">
         <div className="ui grid">
           <div className="four wide column">
-            <Filters />
+            <Filters onChangeType={onChangeType} onFindPetsClick={onFindPetsClick} />
           </div>
           <div className="twelve wide column">
             <PetBrowser />
